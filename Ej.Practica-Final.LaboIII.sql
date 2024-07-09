@@ -1,34 +1,31 @@
 --------------------------------------------------
 ----------------- EJERCICIOS ---------------------
 --------------------------------------------------
-
-
-
 /* 
 1. Listar los nombres, apellidos y sueldo de los empleados cuyo sueldo es mayor que el sueldo promedio de todos los empleados. 
-También se debe incluir el sueldo promedio en los resultados. 
+TambiÃ©n se debe incluir el sueldo promedio en los resultados. 
 
-2. Listar el nombre, apellido y sueldo de cada empleado, con columna adicional llamada SueldoConBonus que calcule un 5% adicional al sueldo para empleados con más de 10 años de antigüedad, 
-y un 3% para empleados con antigüedad entre 5 y 10 años. Los empleados con menos de 5 años de antigüedad no reciben bonus.
+2. Listar el nombre, apellido y sueldo de cada empleado, con columna adicional llamada SueldoConBonus que calcule un 5% adicional al sueldo para empleados con mÃ¡s de 10 aÃ±os de antigÃ¼edad, 
+y un 3% para empleados con antigÃ¼edad entre 5 y 10 aÃ±os. Los empleados con menos de 5 aÃ±os de antigÃ¼edad no reciben bonus.
 
-3. Listar la cantidad de empleados por categoría, pero solo para las categorías "Administrativo", "Gerente" y "Supervisor". 
+3. Listar la cantidad de empleados por categorÃ­a, pero solo para las categorÃ­as "Administrativo", "Gerente" y "Supervisor". 
 
-4. Crea un procedimiento almacenado llamado SP_EmpleadosConAdelantos que reciba un año como parámetro 
-y liste los nombres y apellidos de los empleados que han solicitado adelantos en ese año. 
-La lista debe incluir también la cantidad total de dinero adelantado.
+4. Crea un procedimiento almacenado llamado SP_EmpleadosConAdelantos que reciba un aÃ±o como parÃ¡metro 
+y liste los nombres y apellidos de los empleados que han solicitado adelantos en ese aÃ±o. 
+La lista debe incluir tambiÃ©n la cantidad total de dinero adelantado.
 
-5. Crea una función llamada fn_CalcularAntiguedad que reciba como parámetro el año de ingreso de un empleado y devuelva la antigüedad en años. 
-Usa esta función en una consulta que liste los nombres, apellidos y la antigüedad de todos los empleados.
+5. Crea una funciÃ³n llamada fn_CalcularAntiguedad que reciba como parÃ¡metro el aÃ±o de ingreso de un empleado y devuelva la antigÃ¼edad en aÃ±os. 
+Usa esta funciÃ³n en una consulta que liste los nombres, apellidos y la antigÃ¼edad de todos los empleados.
 
 6. Crea una vista llamada VW_AdelantosAprobados que muestre todos los adelantos aprobados. 
 La vista debe mostrar; Nombre, apellido y categoria de empleado, Fecha y Monto de los adelantos 
 y una columna adicional Estado que debe mostrar "Aprobado" en caso de que el monto sea inferior al 50% de su sueldo. 
 Caso contrario, debe mostrar "No aprobado".
 
-7. Crear un trigger que valide la inserción de registros en la tabla Empleados.
-- Verificar que el sueldo del empleado no sea menor al sueldo base de acuerdo a su categoría.
-- Verificar que el sueldo del empleado no sea mayor al doble del sueldo base de acuerdo a su categoría.
-- Verificar que el año de ingreso del empleado no sea posterior al año actual. En caso de serlo, insertar el empleado con el año actual 
+7. Crear un trigger que valide la inserciÃ³n de registros en la tabla Empleados.
+- Verificar que el sueldo del empleado no sea menor al sueldo base de acuerdo a su categorÃ­a.
+- Verificar que el sueldo del empleado no sea mayor al doble del sueldo base de acuerdo a su categorÃ­a.
+- Verificar que el aÃ±o de ingreso del empleado no sea posterior al aÃ±o actual. En caso de serlo, insertar el empleado con el aÃ±o actual 
 */
 
 
@@ -41,14 +38,14 @@ Caso contrario, debe mostrar "No aprobado".
 
 
 /* 1. Listar los nombres, apellidos y sueldo de los empleados cuyo sueldo es mayor que el sueldo promedio de todos los empleados. 
-También se debe incluir el sueldo promedio en los resultados. */
+TambiÃ©n se debe incluir el sueldo promedio en los resultados. */
 
 SELECT Nombre + ', ' + Apellido AS ApellidoNombre, Sueldo,(SELECT AVG(Sueldo) FROM Empleados) AS SueldoPromedio 
 FROM Empleados
 WHERE Sueldo > (SELECT AVG(Sueldo) FROM Empleados);
 
-/* 2. Listar el nombre, apellido y sueldo de cada empleado, con columna adicional llamada SueldoConBonus que calcule un 5% adicional al sueldo para empleados con más de 10 años de antigüedad, 
-y un 3% para empleados con antigüedad entre 5 y 10 años. Los empleados con menos de 5 años de antigüedad no reciben bonus.*/
+/* 2. Listar el nombre, apellido y sueldo de cada empleado, con columna adicional llamada SueldoConBonus que calcule un 5% adicional al sueldo para empleados con mÃ¡s de 10 aÃ±os de antigÃ¼edad, 
+y un 3% para empleados con antigÃ¼edad entre 5 y 10 aÃ±os. Los empleados con menos de 5 aÃ±os de antigÃ¼edad no reciben bonus.*/
 
 SELECT Nombre + ', ' + Apellido AS ApellidoNombre,
 CASE
@@ -58,16 +55,16 @@ CASE
 END AS SueldoConBonus
 FROM Empleados;
 
--- 3. Listar la cantidad de empleados por categoría, pero solo para las categorías "Administrativo", "Gerente" y "Supervisor". 
+-- 3. Listar la cantidad de empleados por categorÃ­a, pero solo para las categorÃ­as "Administrativo", "Gerente" y "Supervisor". 
 
 SELECT COUNT(*) AS CantidadEmpleados, Categorias.Nombre FROM Empleados
 LEFT JOIN Categorias ON Categorias.IDCategoria = Empleados.IDCategoria
 WHERE Categorias.Nombre IN ('Administrativo','Gerente','Supervisor')
 GROUP BY Categorias.Nombre;
 
-/* 4. Crea un procedimiento almacenado llamado SP_EmpleadosConAdelantos que reciba un año como parámetro 
-y liste los nombres y apellidos de los empleados que han solicitado adelantos en ese año. 
-La lista debe incluir también la cantidad total de dinero adelantado.*/
+/* 4. Crea un procedimiento almacenado llamado SP_EmpleadosConAdelantos que reciba un aÃ±o como parÃ¡metro 
+y liste los nombres y apellidos de los empleados que han solicitado adelantos en ese aÃ±o. 
+La lista debe incluir tambiÃ©n la cantidad total de dinero adelantado.*/
 
 CREATE OR ALTER PROCEDURE SP_EmpleadosConAdelantos (@Year INT)
 AS BEGIN
@@ -81,8 +78,8 @@ AS BEGIN
 
 END;
 
-/* 5. Crea una función llamada fn_CalcularAntiguedad que reciba como parámetro el año de ingreso de un empleado y devuelva la antigüedad en años. 
-Usa esta función en una consulta que liste los nombres, apellidos y la antigüedad de todos los empleados.*/
+/* 5. Crea una funciÃ³n llamada fn_CalcularAntiguedad que reciba como parÃ¡metro el aÃ±o de ingreso de un empleado y devuelva la antigÃ¼edad en aÃ±os. 
+Usa esta funciÃ³n en una consulta que liste los nombres, apellidos y la antigÃ¼edad de todos los empleados.*/
 
 CREATE OR ALTER FUNCTION FN_CalcularAntiguedad(@YearIngreso INT)
 RETURNS INT
@@ -113,10 +110,10 @@ JOIN Empleados E ON E.IDEmpleado = A.IDEmpleado
 JOIN Categorias C ON C.IDCategoria = E.IDCategoria;
 
 
-/* 7. Crear un trigger que valide la inserción de registros en la tabla Empleados.
-- Verificar que el sueldo del empleado no sea menor al sueldo base de acuerdo a su categoría.
-- Verificar que el sueldo del empleado no sea mayor al doble del sueldo base de acuerdo a su categoría.
-- Verificar que el año de ingreso del empleado no sea posterior al año actual. En caso de serlo, insertar el empleado con el año actual */
+/* 7. Crear un trigger que valide la inserciÃ³n de registros en la tabla Empleados.
+- Verificar que el sueldo del empleado no sea menor al sueldo base de acuerdo a su categorÃ­a.
+- Verificar que el sueldo del empleado no sea mayor al doble del sueldo base de acuerdo a su categorÃ­a.
+- Verificar que el aÃ±o de ingreso del empleado no sea posterior al aÃ±o actual. En caso de serlo, insertar el empleado con el aÃ±o actual */
 
 CREATE OR ALTER TRIGGER TR_VALIDAR_EMPLEADO ON Empleados
 INSTEAD OF INSERT
@@ -173,7 +170,7 @@ AS BEGIN
 END;
 
 
----- CODIGO DE PRUEBA
+---- CODIGO DE PRUEBA TRIGGER
 INSERT INTO Empleados (IDCategoria, Nombre, Apellido, AnioIngreso, Sueldo)
 VALUES (2, 'Test', 'Empleado', 2020, 700); -- Sueldo menor al sueldo base de $800
 
@@ -181,7 +178,7 @@ INSERT INTO Empleados (IDCategoria, Nombre, Apellido, AnioIngreso, Sueldo)
 VALUES (2, 'Test', 'Empleado', 2020, 1700); -- Sueldo mayor al doble del sueldo base de $800
 
 INSERT INTO Empleados (IDCategoria, Nombre, Apellido, AnioIngreso, Sueldo)
-VALUES (2, 'Test', 'Empleado', 2025, 1000); -- Año de ingreso mayor al año actual
+VALUES (2, 'Test', 'Empleado', 2025, 1000); -- AÃ±o de ingreso mayor al aÃ±o actual
 
 SELECT * FROM Empleados
 
